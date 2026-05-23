@@ -1,8 +1,12 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
-    background-color: #020507;
-    color: #7fffb2;
+    background: linear-gradient(135deg, #001a33 0%, #003355 100%);
+    color: #00ff88;
     font-family: 'Consolas', 'Courier New', monospace;
     display: flex;
     flex-direction: column;
@@ -15,41 +19,58 @@ body {
 
 #viewport-wrapper {
     position: relative;
-    border: 3px solid #1b4b2b;
+    border: 4px solid #00aa44;
     background-color: #000;
-    box-shadow: 0 0 35px rgba(0, 255, 140, 0.18);
-    border-radius: 4px;
+    box-shadow: 
+        0 0 40px rgba(0, 255, 136, 0.25),
+        0 0 80px rgba(0, 170, 68, 0.15),
+        inset 0 0 20px rgba(0, 255, 136, 0.05);
+    border-radius: 6px;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.2));
 }
 
 #flightRenderCanvas {
     display: block;
+    filter: brightness(1.05) contrast(1.1);
 }
 
 #system-dashboard {
     width: 1000px;
-    margin-top: 12px;
+    margin-top: 15px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    background: rgba(0, 8, 4, 0.95);
-    border: 1px solid #1b4b2b;
-    padding: 10px 20px;
+    gap: 20px;
+    background: linear-gradient(180deg, rgba(0, 20, 10, 0.95) 0%, rgba(0, 10, 5, 0.95) 100%);
+    border: 2px solid #00aa44;
+    padding: 12px 20px;
     box-sizing: border-box;
-    font-size: 12px;
-    border-radius: 2px;
+    font-size: 11px;
+    border-radius: 4px;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.1),
+        inset 0 0 10px rgba(0, 255, 136, 0.05);
+    letter-spacing: 1px;
+}
+
+#system-dashboard > div {
+    flex: 0 1 auto;
 }
 
 .hud-highlight {
-    color: #ffffff;
+    color: #ffff88;
     font-weight: bold;
+    text-shadow: 0 0 5px #ffff88;
 }
 
 .warn-alert {
     color: #ff3333;
     animation: masterWarningBlink 0.4s infinite alternate;
+    text-shadow: 0 0 8px #ff3333;
 }
 
 @keyframes masterWarningBlink {
-    0% { opacity: 0.3; }
+    0% { opacity: 0.2; }
     100% { opacity: 1; }
 }
 
@@ -57,41 +78,116 @@ body {
 
 #mobile-controls {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
     display: none;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     pointer-events: none;
+    z-index: 100;
 }
 
 .mc-row {
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .mc-btn {
     pointer-events: auto;
-    background: rgba(0, 30, 10, 0.85);
-    color: #7fffb2;
-    border: 1px solid #1b4b2b;
-    border-radius: 4px;
-    padding: 6px 10px;
-    font-size: 14px;
+    background: linear-gradient(135deg, rgba(0, 40, 20, 0.9) 0%, rgba(0, 25, 15, 0.95) 100%);
+    color: #00ff88;
+    border: 2px solid #00aa44;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.mc-btn:hover {
+    background: rgba(0, 60, 30, 0.95);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
 }
 
 .mc-btn:active {
-    background: rgba(0, 70, 25, 0.95);
+    background: rgba(0, 100, 50, 1);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    transform: scale(0.95);
+}
+
+.mc-fire {
+    border-color: #ff6666;
+    color: #ff6666;
+    text-shadow: 0 0 5px #ff6666;
+}
+
+.mc-fire:active {
+    background: rgba(100, 20, 20, 1);
+    box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+}
+
+.mc-missile {
+    border-color: #ffcc33;
+    color: #ffcc33;
+    text-shadow: 0 0 5px #ffcc33;
+}
+
+.mc-missile:active {
+    background: rgba(100, 80, 0, 1);
+    box-shadow: 0 0 20px rgba(255, 204, 51, 0.5);
+}
+
+.mc-flare {
+    border-color: #ff9999;
+    color: #ff9999;
+    text-shadow: 0 0 5px #ff9999;
+}
+
+.mc-flare:active {
+    background: rgba(100, 50, 50, 1);
+    box-shadow: 0 0 20px rgba(255, 153, 153, 0.5);
 }
 
 /* Show mobile controls on small screens */
 @media (max-width: 900px) {
     #viewport-wrapper {
-        transform: scale(0.9);
+        transform: scale(0.85);
     }
     #mobile-controls {
         display: flex;
     }
+    #system-dashboard {
+        width: auto;
+        max-width: 90vw;
+        transform: scale(0.85);
+    }
+}
+
+/* Responsive for very small screens */
+@media (max-width: 600px) {
+    #viewport-wrapper {
+        transform: scale(0.7);
+    }
+    #mobile-controls {
+        display: flex;
+    }
+    #system-dashboard {
+        transform: scale(0.7);
+        gap: 10px;
+    }
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    overflow: hidden;
 }
