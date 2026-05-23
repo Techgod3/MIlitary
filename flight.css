@@ -4,12 +4,16 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     background: #000;
     color: #0f0;
     font-family: 'Courier New', monospace;
-    overflow: hidden;
-    height: 100vh;
 }
 
 #hud-container {
@@ -25,6 +29,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
 }
 
 #hud-overlay {
@@ -36,28 +41,30 @@ body {
     pointer-events: none;
     font-size: 14px;
     letter-spacing: 2px;
+    z-index: 10;
 }
 
 /* HUD Panels */
 .hud-panel {
     position: absolute;
-    background: rgba(0, 20, 0, 0.7);
+    background: rgba(0, 10, 0, 0.85);
     border: 2px solid #0f0;
     padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    backdrop-filter: blur(2px);
 }
 
 #left-panel {
     top: 20px;
     left: 20px;
-    min-width: 180px;
+    min-width: 200px;
 }
 
 #right-panel {
     top: 20px;
     right: 20px;
-    min-width: 180px;
+    min-width: 200px;
 }
 
 .hud-item {
@@ -65,21 +72,23 @@ body {
     justify-content: space-between;
     margin: 8px 0;
     padding: 5px;
-    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 255, 0, 0.2);
 }
 
 .hud-item .label {
     color: #0f0;
     font-weight: bold;
-    min-width: 70px;
+    min-width: 80px;
+    font-size: 12px;
 }
 
 .hud-item .value {
     color: #0f0;
     font-weight: bold;
     text-align: right;
-    min-width: 80px;
+    min-width: 90px;
     text-shadow: 0 0 10px #0f0;
+    font-size: 12px;
 }
 
 /* Center HUD */
@@ -90,6 +99,7 @@ body {
     transform: translate(-50%, -50%);
     width: 200px;
     height: 200px;
+    z-index: 10;
 }
 
 .crosshair {
@@ -99,7 +109,7 @@ body {
     transform: translate(-50%, -50%);
     width: 40px;
     height: 40px;
-    border: 2px solid rgba(0, 255, 0, 0.6);
+    border: 2px solid rgba(0, 255, 0, 0.8);
     border-radius: 50%;
 }
 
@@ -111,7 +121,7 @@ body {
 }
 
 .crosshair::before {
-    width: 50px;
+    width: 60px;
     height: 2px;
     top: 50%;
     left: 50%;
@@ -120,7 +130,7 @@ body {
 
 .crosshair::after {
     width: 2px;
-    height: 50px;
+    height: 60px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -146,13 +156,14 @@ body {
 /* Minimap */
 #minimap {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(0, 20, 0, 0.8);
+    bottom: 30px;
+    right: 30px;
+    background: rgba(0, 10, 0, 0.9);
     border: 2px solid #0f0;
     border-radius: 50%;
     padding: 10px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    z-index: 10;
 }
 
 #minimapCanvas {
@@ -163,39 +174,43 @@ body {
 /* Controls Info */
 #controls-info {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0, 20, 0, 0.8);
+    bottom: 30px;
+    left: 30px;
+    background: rgba(0, 10, 0, 0.85);
     border: 2px solid #0f0;
-    padding: 10px 15px;
+    padding: 12px 18px;
     border-radius: 5px;
-    font-size: 12px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    font-size: 11px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    z-index: 10;
 }
 
 #controls-info div {
     color: #0f0;
     letter-spacing: 1px;
+    line-height: 1.4;
 }
 
 /* Objectives */
 #objectives {
     position: absolute;
-    top: 20px;
+    top: 30px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 20, 0, 0.8);
+    background: rgba(0, 10, 0, 0.85);
     border: 2px solid #0f0;
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 5px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    z-index: 10;
+    max-width: 500px;
 }
 
 .objective {
     color: #0f0;
-    margin: 5px 0;
-    font-size: 13px;
+    margin: 6px 0;
+    font-size: 12px;
 }
 
 .objective strong {
@@ -206,20 +221,27 @@ body {
 /* Responsive */
 @media (max-width: 1024px) {
     #left-panel, #right-panel {
-        font-size: 12px;
+        font-size: 11px;
         padding: 10px;
-        min-width: 140px;
+        min-width: 160px;
     }
     
     .hud-item .label {
-        min-width: 50px;
-    }
-    
-    .hud-item .value {
         min-width: 60px;
     }
     
+    .hud-item .value {
+        min-width: 70px;
+    }
+    
     #controls-info {
-        font-size: 10px;
+        font-size: 9px;
+        padding: 8px 12px;
+    }
+    
+    #minimap {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px;
     }
 }
