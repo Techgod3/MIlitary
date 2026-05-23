@@ -3,45 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TACTICAL FLIGHT SIMULATOR v2.0</title>
-    <link rel="stylesheet" href="style.css">
+    <title>REALISTIC FLIGHT SIMULATOR - Naval Combat</title>
+    <link rel="stylesheet" href="flight.css">
 </head>
 <body>
 
-<div id="viewport-wrapper">
-    <canvas id="flightRenderCanvas" width="1000" height="600"></canvas>
+<div id="hud-container">
+    <!-- Main viewport -->
+    <canvas id="flightCanvas" width="1920" height="1080"></canvas>
+    
+    <!-- HUD Overlay -->
+    <div id="hud-overlay">
+        <!-- Altitude/Speed/Heading -->
+        <div id="left-panel" class="hud-panel">
+            <div class="hud-item">
+                <span class="label">ALTITUDE</span>
+                <span class="value" id="altitude">0 ft</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">AIRSPEED</span>
+                <span class="value" id="airspeed">0 kt</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">HEADING</span>
+                <span class="value" id="heading">000°</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">FUEL</span>
+                <span class="value" id="fuel">100%</span>
+            </div>
+        </div>
 
-    <!-- Mobile controls -->
-    <div id="mobile-controls">
-        <div class="mc-row">
-            <button class="mc-btn" data-key="w">▲ PITCH UP</button>
+        <!-- Attitude Indicator Center -->
+        <div id="center-hud">
+            <div class="crosshair"></div>
+            <div id="targeting-info" style="display:none;">
+                <div class="target-lock">TARGET LOCKED</div>
+            </div>
         </div>
-        <div class="mc-row">
-            <button class="mc-btn" data-key="a">◀ BANK LEFT</button>
-            <button class="mc-btn" data-key="s">▼ PITCH DOWN</button>
-            <button class="mc-btn" data-key="d">▶ BANK RIGHT</button>
+
+        <!-- Right Panel -->
+        <div id="right-panel" class="hud-panel">
+            <div class="hud-item">
+                <span class="label">HEALTH</span>
+                <span class="value" id="health">100%</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">AMMO</span>
+                <span class="value" id="ammo">500</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">MISSILES</span>
+                <span class="value" id="missiles">8</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">SCORE</span>
+                <span class="value" id="score">0</span>
+            </div>
         </div>
-        <div class="mc-row">
-            <button class="mc-btn mc-fire" data-key=" ">🔫 GUNS</button>
-            <button class="mc-btn mc-missile" data-key="q">🚀 MISSILE</button>
-            <button class="mc-btn mc-flare" data-key="f">✦ FLARE</button>
+
+        <!-- Minimap -->
+        <div id="minimap">
+            <canvas id="minimapCanvas" width="200" height="200"></canvas>
+        </div>
+
+        <!-- Controls Info -->
+        <div id="controls-info">
+            <div>↑↓ PITCH | ←→ ROLL | SPACE FIRE | M MISSILE | F FLARE | W LANDING MODE</div>
+        </div>
+
+        <!-- Objectives -->
+        <div id="objectives">
+            <div class="objective"><strong>OBJECTIVES:</strong></div>
+            <div class="objective">• Destroy Enemy Aircraft</div>
+            <div class="objective">• Sink Naval Vessels</div>
+            <div class="objective">• Return to Naval Base</div>
         </div>
     </div>
 </div>
 
-<div id="system-dashboard">
-    <div>[ TACTICAL FLIGHT CONTROL SUITE v2.0 ]</div>
-    <div>
-        CONTROLS:
-        <span class="hud-highlight">W / S</span> Pitch |
-        <span class="hud-highlight">A / D</span> Bank |
-        <span class="hud-highlight">SPACE</span> Guns |
-        <span class="hud-highlight">Q</span> Missiles |
-        <span class="hud-highlight">F</span> Flares
-    </div>
-    <div>SYSTEM STATUS: <span id="dash-perf">-- FPS</span></div>
-</div>
-
-<script src="script.js"></script>
+<script src="flight.js"></script>
 </body>
 </html>
