@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TACTICAL FLIGHT SIMULATOR v2.0</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="viewport-wrapper">
+    <canvas id="flightRenderCanvas" width="1000" height="600"></canvas>
+
+    <!-- Mobile controls -->
+    <div id="mobile-controls">
+        <div class="mc-row">
+            <button class="mc-btn" data-key="w">▲ PITCH UP</button>
+        </div>
+        <div class="mc-row">
+            <button class="mc-btn" data-key="a">◀ BANK LEFT</button>
+            <button class="mc-btn" data-key="s">▼ PITCH DOWN</button>
+            <button class="mc-btn" data-key="d">▶ BANK RIGHT</button>
+        </div>
+        <div class="mc-row">
+            <button class="mc-btn mc-fire" data-key=" ">🔫 GUNS</button>
+            <button class="mc-btn mc-missile" data-key="q">🚀 MISSILE</button>
+            <button class="mc-btn mc-flare" data-key="f">✦ FLARE</button>
+        </div>
+    </div>
+</div>
+
+<div id="system-dashboard">
+    <div>[ TACTICAL FLIGHT CONTROL SUITE v2.0 ]</div>
+    <div>
+        CONTROLS:
+        <span class="hud-highlight">W / S</span> Pitch |
+        <span class="hud-highlight">A / D</span> Bank |
+        <span class="hud-highlight">SPACE</span> Guns |
+        <span class="hud-highlight">Q</span> Missiles |
+        <span class="hud-highlight">F</span> Flares
+    </div>
+    <div>SYSTEM STATUS: <span id="dash-perf">-- FPS</span></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
