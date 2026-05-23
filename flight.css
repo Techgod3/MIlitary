@@ -1,0 +1,225 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    height: 100vh;
+}
+
+#hud-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#flightCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#hud-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+/* HUD Panels */
+.hud-panel {
+    position: absolute;
+    background: rgba(0, 20, 0, 0.7);
+    border: 2px solid #0f0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+#left-panel {
+    top: 20px;
+    left: 20px;
+    min-width: 180px;
+}
+
+#right-panel {
+    top: 20px;
+    right: 20px;
+    min-width: 180px;
+}
+
+.hud-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.hud-item .label {
+    color: #0f0;
+    font-weight: bold;
+    min-width: 70px;
+}
+
+.hud-item .value {
+    color: #0f0;
+    font-weight: bold;
+    text-align: right;
+    min-width: 80px;
+    text-shadow: 0 0 10px #0f0;
+}
+
+/* Center HUD */
+#center-hud {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+}
+
+.crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(0, 255, 0, 0.6);
+    border-radius: 50%;
+}
+
+.crosshair::before,
+.crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(0, 255, 0, 0.6);
+}
+
+.crosshair::before {
+    width: 50px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.crosshair::after {
+    width: 2px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.target-lock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #f00;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #f00;
+    animation: lock-pulse 0.5s infinite alternate;
+}
+
+@keyframes lock-pulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Minimap */
+#minimap {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 20, 0, 0.8);
+    border: 2px solid #0f0;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+#minimapCanvas {
+    border-radius: 50%;
+    display: block;
+}
+
+/* Controls Info */
+#controls-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 20, 0, 0.8);
+    border: 2px solid #0f0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+#controls-info div {
+    color: #0f0;
+    letter-spacing: 1px;
+}
+
+/* Objectives */
+#objectives {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 20, 0, 0.8);
+    border: 2px solid #0f0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.objective {
+    color: #0f0;
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.objective strong {
+    color: #fff;
+    text-shadow: 0 0 10px #0f0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    #left-panel, #right-panel {
+        font-size: 12px;
+        padding: 10px;
+        min-width: 140px;
+    }
+    
+    .hud-item .label {
+        min-width: 50px;
+    }
+    
+    .hud-item .value {
+        min-width: 60px;
+    }
+    
+    #controls-info {
+        font-size: 10px;
+    }
+}
