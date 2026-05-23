@@ -15,11 +15,11 @@ window.addEventListener('resize', resizeCanvas);
 const player = {
     x: 500,        // World X
     y: 500,        // World Y
-    altitude: 1000, // Feet
+    altitude: 2000, // Feet
     heading: 0,     // Degrees (0-360)
     pitch: 0,       // Degrees (-90 to 90)
     roll: 0,        // Degrees (-180 to 180)
-    speed: 100,     // Knots
+    speed: 150,     // Knots
     maxSpeed: 500,
     minSpeed: 50,
     health: 100,
@@ -259,7 +259,7 @@ function update(deltaTime) {
     player.altitude += player.pitch * 0.5;
     player.altitude = Math.max(0, Math.min(player.altitude, 35000));
 
-    if (player.altitude <= 0) {
+    if (player.altitude <= 100) {
         if (Math.hypot(player.x - navalBase.x, player.y - navalBase.y) < 300) {
             alert('SUCCESS! You landed safely at the naval base!\nFinal Score: ' + player.score);
             location.reload();
@@ -372,10 +372,10 @@ function update(deltaTime) {
     }
 
     // Update explosions
-    explosions.forEach(exp => {
+    explosions = explosions.filter(exp => {
         exp.life -= deltaTime;
+        return exp.life > 0;
     });
-    explosions = explosions.filter(exp => exp.life > 0);
 
     // Respawn enemies
     if (enemies.length < 8) {
@@ -422,55 +422,71 @@ function createExplosion(x, y) {
 
 // ==================== RENDERING ====================
 function drawSky() {
-    const altPercent = player.altitude / 35000;
-    const skyColor = [
-        Math.floor(135 - altPercent * 100),
-        Math.floor(206 - altPercent * 150),
-        Math.floor(235 - altPercent * 200)
-    ];
+    const altPercent = Math.min(1, player.altitude / 35000);
+    
+    // Sky color based on altitude
+    const skyR = Math.floor(135 - altPercent * 100);
+    const skyG = Math.floor(206 - altPercent * 150);
+    const skyB = Math.floor(235 - altPercent * 200);
+    
+    const groundR = Math.floor(34 + altPercent * 50);
+    const groundG = Math.floor(139 + altPercent * 50);
+    const groundB = Math.floor(34 + altPercent * 50);
 
-    const groundColor = [
-        Math.floor(34 + altPercent * 50),
-        Math.floor(139 + altPercent * 50),
-        Math.floor(34 + altPercent * 50)
-    ];
+    // Clear with sky color
+    ctx.fillStyle = `rgb(${skyR}, ${skyG}, ${skyB})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Sky
-    ctx.fillStyle = `rgb(${skyColor})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
+    // Horizon line affected by pitch
+    const horizonY = canvas.height / 2 + player.pitch * 4;
 
-    // Horizon effect
-    const horizonY = canvas.height / 2 - player.pitch * 3;
+    // Ground gradient below horizon
     const groundGradient = ctx.createLinearGradient(0, horizonY, 0, canvas.height);
-    groundGradient.addColorStop(0, `rgb(${groundColor})`);
+    groundGradient.addColorStop(0, `rgb(${groundR}, ${groundG}, ${groundB})`);
     groundGradient.addColorStop(1, 'rgb(20, 80, 20)');
     ctx.fillStyle = groundGradient;
-    ctx.fillRect(0, horizonY, canvas.width, canvas.height);
+    ctx.fillRect(0, horizonY, canvas.width, canvas.height - horizonY);
+
+    // Horizon line
+    ctx.strokeStyle = 'rgba(100, 100, 100, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, horizonY);
+    ctx.lineTo(canvas.width, horizonY);
+    ctx.stroke();
 }
 
 function drawWorld() {
     const scale = 0.3;
 
     // Draw terrain grid
-    ctx.strokeStyle = 'rgba(100, 200, 100, 0.2)';
+    ctx.strokeStyle = 'rgba(100, 150, 100, 0.15)';
     ctx.lineWidth = 1;
     for (let i = 0; i < 3000; i += 500) {
         const screenX = (i - player.x) * scale + canvas.width / 2;
         if (screenX > -500 && screenX < canvas.width + 500) {
             ctx.beginPath();
-            ctx.moveTo(screenX, 0);
+            ctx.moveTo(screenX, canvas.height / 2 + 100);
             ctx.lineTo(screenX, canvas.height);
+            ctx.stroke();
+        }
+        
+        const screenY = (i - player.y) * scale + canvas.height / 2 + 100;
+        if (screenY > canvas.height / 2 && screenY < canvas.height) {
+            ctx.beginPath();
+            ctx.moveTo(0, screenY);
+            ctx.lineTo(canvas.width, screenY);
             ctx.stroke();
         }
     }
 
     // Draw naval base
     const baseCenterX = (navalBase.x - player.x) * scale + canvas.width / 2;
-    const baseCenterY = (navalBase.y - player.y) * scale + canvas.height / 2;
+    const baseCenterY = (navalBase.y - player.y) * scale + canvas.height / 2 + 100;
 
     // Base outline
     ctx.strokeStyle = '#00ff00';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.strokeRect(
         baseCenterX - navalBase.width / 2 * scale,
         baseCenterY - navalBase.height / 2 * scale,
@@ -479,7 +495,7 @@ function drawWorld() {
     );
 
     // Runways
-    ctx.fillStyle = '#333';
+    ctx.fillStyle = '#222';
     navalBase.runways.forEach(runway => {
         ctx.fillRect(
             baseCenterX + (runway.x - navalBase.x) * scale,
@@ -490,7 +506,7 @@ function drawWorld() {
     });
 
     // Hangars
-    ctx.fillStyle = '#666';
+    ctx.fillStyle = '#555';
     navalBase.hangars.forEach(hangar => {
         ctx.fillRect(
             baseCenterX + (hangar.x - navalBase.x) * scale,
@@ -514,7 +530,7 @@ function drawWorld() {
 
 function drawAircraft() {
     const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerY = canvas.height * 0.65;
 
     ctx.save();
     ctx.translate(centerX, centerY);
@@ -523,21 +539,21 @@ function drawAircraft() {
     // Aircraft fuselage (blue)
     ctx.fillStyle = '#0088ff';
     ctx.beginPath();
-    ctx.moveTo(20, 0);
-    ctx.lineTo(-15, -10);
-    ctx.lineTo(-8, 0);
-    ctx.lineTo(-15, 10);
+    ctx.moveTo(25, 0);
+    ctx.lineTo(-18, -12);
+    ctx.lineTo(-10, 0);
+    ctx.lineTo(-18, 12);
     ctx.closePath();
     ctx.fill();
 
     // Wings
     ctx.fillStyle = '#0066cc';
-    ctx.fillRect(-12, -20, 25, 15);
-    ctx.fillRect(-12, 5, 25, 15);
+    ctx.fillRect(-15, -25, 30, 18);
+    ctx.fillRect(-15, 7, 30, 18);
 
     // Cockpit
     ctx.fillStyle = '#00ff00';
-    ctx.fillRect(-8, -4, 6, 8);
+    ctx.fillRect(-10, -5, 8, 10);
 
     ctx.restore();
 }
@@ -559,7 +575,7 @@ function drawMinimap() {
     minimapCtx.clearRect(0, 0, minimapCanvas.width, minimapCanvas.height);
 
     // Background
-    minimapCtx.fillStyle = 'rgba(0, 20, 0, 0.8)';
+    minimapCtx.fillStyle = 'rgba(0, 20, 0, 0.9)';
     minimapCtx.fillRect(0, 0, minimapCanvas.width, minimapCanvas.height);
 
     // Border
@@ -581,7 +597,7 @@ function drawMinimap() {
         minimapCtx.fillRect(x - 3, y - 3, 6, 6);
     });
 
-    // Player
+    // Player center
     minimapCtx.fillStyle = '#0f0';
     minimapCtx.fillRect(98, 98, 4, 4);
 }
@@ -600,12 +616,28 @@ function draw() {
         ctx.beginPath();
         ctx.arc(
             (exp.x - player.x) * 0.3 + canvas.width / 2,
-            (exp.y - player.y) * 0.3 + canvas.height / 2,
+            (exp.y - player.y) * 0.3 + canvas.height / 2 + 100,
             exp.radius,
             0,
             Math.PI * 2
         );
         ctx.fill();
+    });
+
+    // Draw shots (bullets)
+    ctx.fillStyle = '#ffff00';
+    shots.forEach(shot => {
+        if (shot.owner === 'player') {
+            ctx.beginPath();
+            ctx.arc(
+                (shot.x - player.x) * 0.3 + canvas.width / 2,
+                (shot.y - player.y) * 0.3 + canvas.height / 2 + 100,
+                3,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
     });
 
     drawAircraft();
@@ -618,7 +650,7 @@ let lastTime = Date.now();
 
 function gameLoop() {
     const now = Date.now();
-    const deltaTime = (now - lastTime) / 1000;
+    const deltaTime = Math.min((now - lastTime) / 1000, 0.016); // Cap at 60fps
     lastTime = now;
 
     update(deltaTime);
