@@ -1,0 +1,33 @@
+# Unreal Engine
+Binaries/
+Intermediate/
+Saved/
+.vs/
+.vscode/
+*.VC.db
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+# OS
+.DS_Store
+Thumbds.db
+
+# IDEs
+*.sublime-workspace
+*.sublime-project
+
+# Build files
+*.a
+*.lib
+*.o
+*.obj
+*.exp
+
+# Plugins
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# Temp
+*.tmp
+*.log
